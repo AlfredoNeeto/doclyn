@@ -91,7 +91,7 @@ export function ExtractedFieldTable({ fields }: ExtractedFieldTableProps) {
         {fields.map((field) => (
           <TableRow key={field.fieldName}>
             <TableCell className="font-medium">{formatFieldName(field.fieldName)}</TableCell>
-            <TableCell className="max-w-xs truncate">{parseReviewValue(field.value, field.fieldName)}</TableCell>
+            <TableCell className="max-w-lg whitespace-normal break-words">{parseReviewValue(field.value, field.fieldName)}</TableCell>
             <TableCell>{formatExtractionSource(field.source)}</TableCell>
             <TableCell><ConfidenceBadge value={field.confidence} /></TableCell>
             <TableCell>

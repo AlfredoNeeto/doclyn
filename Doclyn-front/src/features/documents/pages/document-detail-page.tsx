@@ -238,7 +238,7 @@ export function DocumentDetailPage() {
                     {extractedFields.map((field) => (
                       <TableRow key={field.name}>
                         <TableCell className="font-medium">{field.name}</TableCell>
-                        <TableCell className="max-w-xs truncate">{field.value}</TableCell>
+                        <TableCell className="max-w-lg whitespace-normal break-words">{field.value}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

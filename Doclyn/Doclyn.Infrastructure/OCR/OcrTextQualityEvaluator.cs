@@ -45,33 +45,11 @@ public static class OcrTextQualityEvaluator
         if (string.IsNullOrWhiteSpace(text))
             return false;
 
-        var normalizedText = NormalizeText(text);
-
-        if (normalizedText.Length < minimumTextLength)
-            return false;
-
-        if (!minimumKeywords.Any(normalizedText.Contains))
+        if (text.Length < minimumTextLength)
             return false;
 
         var quality = Evaluate(text);
         return quality.LooksUsable;
-    }
-
-    private static string NormalizeText(string text)
-    {
-        var normalized = text.Normalize(System.Text.NormalizationForm.FormD);
-        var builder = new System.Text.StringBuilder(normalized.Length);
-
-        foreach (var character in normalized)
-        {
-            if (System.Globalization.CharUnicodeInfo.GetUnicodeCategory(character)
-                != System.Globalization.UnicodeCategory.NonSpacingMark)
-            {
-                builder.Append(char.ToUpperInvariant(character));
-            }
-        }
-
-        return builder.ToString().Normalize(System.Text.NormalizationForm.FormC);
     }
 }
 
