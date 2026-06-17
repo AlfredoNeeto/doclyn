@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="Doclyn.Api/Doclyn.Api.csproj" />
+  <Project Path="Doclyn.Application/Doclyn.Application.csproj" />
+  <Project Path="Doclyn.Domain/Doclyn.Domain.csproj" />
+  <Project Path="Doclyn.Infrastructure/Doclyn.Infrastructure.csproj" />
+  <Project Path="Doclyn.IntegrationTests/Doclyn.IntegrationTests.csproj" />
+  <Project Path="Doclyn.UnitTests/Doclyn.UnitTests.csproj" />
+</Solution>

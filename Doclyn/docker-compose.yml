@@ -1,0 +1,103 @@
+name: doclyn-dev
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: doclyn-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=doclyn_dev;Username=postgres;Password=changeme
+      Storage__Endpoint: minio:9000
+      Smtp__Host: mailpit
+      OpenAi__ApiKey: ${OPENAI_API_KEY:-}
+      Serilog__WriteTo__1__Args__serverUrl: http://seq
+    ports:
+      - "5172:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+      seq:
+        condition: service_started
+      mailpit:
+        condition: service_started
+    networks:
+      - doclyn-dev
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: doclyn-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: doclyn_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - doclyn-dev
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d doclyn_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: doclyn-minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - doclyn-dev
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+
+  seq:
+    image: datalust/seq:latest
+    container_name: doclyn-seq
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_FIRSTRUN_NOAUTHENTICATION: "true"
+    ports:
+      - "5341:80"
+    volumes:
+      - seq_data:/data
+    networks:
+      - doclyn-dev
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: doclyn-mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - doclyn-dev
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    name: doclyn-postgres-data
+  minio_data:
+    name: doclyn-minio-data
+  seq_data:
+    name: doclyn-seq-data
+
+networks:
+  doclyn-dev:
+    name: doclyn-dev
+    driver: bridge

@@ -1,0 +1,16 @@
+export const ROUTES = {
+  LOGIN: '/login',
+  REGISTER: '/register',
+  FORGOT_PASSWORD: '/forgot-password',
+  VERIFY_RESET_CODE: '/verify-reset-code',
+  RESET_PASSWORD: '/reset-password',
+  DASHBOARD: '/dashboard',
+  UPLOAD: '/upload',
+  DOCUMENTS: '/documents',
+  DOCUMENT_DETAIL: '/documents/:id',
+  DOCUMENT_CLASSES: '/document-classes',
+  DOCUMENT_CLASS_DETAIL: '/document-classes/:id',
+  DOCUMENT_CLASS_INDEXERS: '/document-classes/:id/indexers',
+  SUGGESTIONS: '/suggestions',
+  SETTINGS: '/settings',
+} as const
